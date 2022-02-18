@@ -1,0 +1,12 @@
+Want to run flask from terminal?
+1) export FLASK_APP=main
+2) flask run
+Run debug mode?
+*** export FLASK_DEBUG=1
+
+<h1></h1>
+
+Styling?
+BOOTSTRAP
+
+python -m pip install -r requirements.txt
