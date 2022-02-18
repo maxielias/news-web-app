@@ -39,17 +39,29 @@
     <h1>Top headlines for selected country</h1>
     <table class="table table-hover table-dark">
       <thead>
-        <!-- Your Values HERE -->
+        <tr>
+          <!-- Your Values HERE -->
+          <th scope="col">TITLE</th>
+          <th scope="col">DESCRIPTION</th>
+           <!-- <th scope="col">URL</th> -->
+           <!-- <th scope="col">IMAGEN</th> -->
+           <!-- <th scope="col">SUBSCRIPTION TO NEWSPAPER</th> -->
+           <!-- <th scope="col">NEWSLETTER</th>  -->    
+        </tr>
       </thead>
       <tbody>
         <!-- Your rows inside the table HERE: -->
           {% for item in top_headlines_title %} 
             <tr>
-              <!-- Your Columns HERE -->
-              <th scope="col">{{ item.title }}</th>
-              <th scope="col">{{ item.description }}</th>
-              <th scope="col">{{ item.url }}</th>
-              <th scope="col">{{ item.urlToImage }}</th>       
+              <!-- Your Values HERE -->
+              <td scope="col">{{ item.title }}</td>
+              <td scope="col">{{ item.description }}</td>
+              <!-- <td scope="col">{{ item.url }}</td> -->
+              <!-- <td scope="col">{{ item.urlToImage }}</td> -->
+              <td>
+                <button class="btn btn-outline btn-info">See more articles from newspaper</button>
+                <button class="btn btn-outline btn-info">Subscribe to newspaper</button>
+              </td>
             </tr>
           {% endfor %}
       </tbody>
