@@ -81,19 +81,15 @@ async def main(urls, api_key=None):
         return data
 
 
-"""if __name__ == '__main__':"""
-
-async def update_top_headers():   
-    
+async def update_top_headers():
     country = 'ar'
     urls = ['https://newsapi.org/v2/top-headlines?country={}'.format(country)]
 
-    results = await main(urls) # asyncio.get_event_loop().run_until_complete(main(urls))
+    results = await main(urls)
+
+    # asyncio.get_event_loop().run_until_complete(main(urls))
 
     asyncio.sleep(1.0)
-
-    """print('{} top headlines for Argentina'.format(
-            int(results[0]['totalResults'])))"""
 
     articles_dict = [a for a in results[0]['articles']]
 
