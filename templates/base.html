@@ -22,15 +22,15 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Top Headlines</a>
+            <a class="nav-link" href="{{ url_for('get_top_headlines') }}">Top Headlines</a>
           </li>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="#">Search Term</a>
+            <a class="nav-link" href="{{ url_for('home') }}">Search Term</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">About</a>
