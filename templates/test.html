@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}
+  ALL WORLD NEWS
+{% endblock %}
+{% block content %} 
+
+
+<div class="grid"> <div>Cell</div> <div>Cell</div> 
+
+var BLOCKS_PER_CHART = 10;
+
+function generateChart(chartContainer) {
+  var container = document.createElement("div");
+  var text = "Hello World!";
+  var blockDiv, textSpan;  // used in the for loop
+
+  container.className = "container2";
+  document.getElementById(chartContainer.replace("#", "")).appendChild(container);
+
+  for(var i = 0; i < BLOCKS_PER_CHART; i++) {
+    blockDiv = document.createElement("div");
+    blockDiv.className = "block";
+    textSpan = document.createElement("span");
+    textSpan.append(text);  // see note about browser compatibility
+    blockDiv.append(textSpan);
+    container.append(blockDiv);
+  }
+}
+
+</div>
+
+{% endblock %}

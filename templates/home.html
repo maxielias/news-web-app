@@ -2,28 +2,25 @@
 {% block title %}
   ALL WORLD NEWS
 {% endblock %}
-{% block content %}
-  THIS IS THE CONTENT OF THE HOME PAGE  
-  {% for item in top_headlines_json %}
-    
-      <div class="grid" style="--bs-columns: {{n_articles}};">
-        <a class="cst_ctn" href="{{item.url}}" rel="canonical" aria-label="infobae story">
-          <h2 class="cst_hl dkt_fs_36">
-            <span>
-              {{item.title}}
-            </span>
-          </h2>
-          <div class="cst_deck dkt_fs_19 dkt_lh_150">
-            {{item.description}}
+{% block content %}  
+  <div class="grid" style="--bs-columns: {{n_articles}};">
+    {% for item in top_headlines_json %}    
+      <a class="cst_ctn" href="{{item.url}}" rel="canonical" aria-label="infobae story">
+        <h2 class="cst_hl dkt_fs_36">
+          <span>
+            {{item.title}}
+          </span>
+        </h2>
+        <div class="cst_deck dkt_fs_19 dkt_lh_150">
+          {{item.description}}
+        </div>
+          <div class="cst_img_ctn cst_img_ctn_16_9">
+            <img class="img-thumbnail" alt="" src="{{item.urlToImage}}" sizes="(min-width: 200px) 200px, 10vw" loading="lazy">
           </div>
-            <div class="cst_img_ctn cst_img_ctn_16_9">
-              <img class="cst_img" alt="edificio Tribunales Talcahuano" src="{{item.urlToImage}}" sizes="(min-width: 1024px) 768px, 90vw" loading="lazy">
-            </div>
-          <div class="overlay_ctn">
-            Por Mariano Boettner
-          </div>
-        </a>
-      </div>
-    
-  {% endfor %}
+        <div class="overlay_ctn">
+          Por Mariano Boettner
+        </div>
+      </a>
+    {% endfor %}
+  </div> 
 {% endblock %}
