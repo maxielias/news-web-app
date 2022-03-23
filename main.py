@@ -4,6 +4,8 @@ import json
 # import os
 import search_news
 import asyncio
+import re
+import math
 
 app = Flask(__name__)
 # db = SQLAlchemy(app)
@@ -34,21 +36,23 @@ def get_top_headlines():
     with open("data/top_headlines.json", "r") as jsonfile:
         top_headlines_json = json.load(jsonfile)
 
-    title = [a['title'] for a in top_headlines_json]
+    title = [a['title'].split(' - ')[0] for a in top_headlines_json]
+
+    title_fixed = title
     n_articles = len([a['title'] for a in top_headlines_json])
 
-    list_title_agg = []
+    """list_title_agg = []
     for t in range(0, len(title), 4):
         start = t
         end = t + 3
-        list_title_agg.append(title[start:end])
+        list_title_agg.append(title[start:end])"""
     
-    rows = len(list_title_agg)
-    cols = len(list_title_agg[0])
+    cols = 4
+    rows = int(math.ceil(len(title)/cols))
 
     return render_template("top_headlines.html",
                            top_headlines_json=top_headlines_json,
-                           top_headlines_titles=title,
+                           top_headlines_titles=title_fixed,
                            n_articles=n_articles,
                            rows=rows,
                            cols=cols)
