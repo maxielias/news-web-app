@@ -23,7 +23,7 @@ async def home():
     n_articles = len([a['title'] for a in top_headlines_json])
 
     return render_template("home.html",
-                           top_headlines_json,
+                           top_headlines_json=top_headlines_json,
                            top_headlines_titles=title,
                            top_headlines_url=url,
                            n_articles=n_articles)
@@ -37,15 +37,40 @@ def get_top_headlines():
     title = [a['title'] for a in top_headlines_json]
     n_articles = len([a['title'] for a in top_headlines_json])
 
+    list_title_agg = []
+    for t in range(0, len(title), 4):
+        start = t
+        end = t + 3
+        list_title_agg.append(title[start:end])
+    
+    rows = len(list_title_agg)
+    cols = len(list_title_agg[0])
+
     return render_template("top_headlines.html",
-                           top_headlines_json,
+                           top_headlines_json=top_headlines_json,
                            top_headlines_titles=title,
-                           n_articles=n_articles)
+                           n_articles=n_articles,
+                           rows=rows,
+                           cols=cols)
 
 
 @app.route("/headlines")
 def top_headlines():
-    return render_template("headlines.html")
+    with open("data/top_headlines.json", "r") as jsonfile:
+        top_headlines_json = json.load(jsonfile)
+
+    title = [a['title'] for a in top_headlines_json]
+    n_articles = len([a['title'] for a in top_headlines_json])
+
+
+    return render_template("headlines.html",
+                           top_headlines_json=top_headlines_json,
+                           top_headlines_titles=title,
+                           n_articles=n_articles)
+
+@app.route("/test")
+def test_html():
+    return render_template("test.html")
 
 
 if __name__ == "__main__":
