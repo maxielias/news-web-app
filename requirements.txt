@@ -3,3 +3,6 @@ asyncio
 aiohttp
 flask-sqlalchemy
 aioflask
+requests
+pandas
+bs4

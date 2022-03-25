@@ -19,9 +19,38 @@ def get_category():
 def get_source():
     return params.source
 
+"""def json_news(path):
+    with open(path, 'r', encoding="utf8") as jsonfile:
+        jsonfile = json.load(jsonfile)
 
-async def get_top_headlines(session, url, q=None, country='ar', category=None,
-                            api_key=None):
+    data = [a for a in jsonfile['articles']]
+
+    return data"""
+
+
+def replace_null_img():
+    country_list = [c[0].lower() for c in params.country]
+    
+    for c in country_list:
+        path = 'data/top_headlines_' + c + '.json'
+
+        with open(path, 'r', encoding="utf8") as jsonfile:     
+            try:
+                data = json.load(jsonfile)
+                replace_null = 'https://imgs.search.brave.com/Ia4xwMxHraroG2AhGFyeaM5KLPQjGCu1924x_5U5Rq8/rs:fit:640:400:1/g:ce/aHR0cHM6Ly9hcnRz/bWlkbm9ydGhjb2Fz/dC5jb20vd3AtY29u/dGVudC91cGxvYWRz/LzIwMTQvMDUvbm8t/aW1hZ2UtYXZhaWxh/YmxlLWljb24tNi5w/bmc'
+                for uti in data['articles']:
+                    if uti['urlToImage'] == None:
+                        uti['urlToImage'] = replace_null
+
+            except:
+                pass
+
+        if data:
+            with open(path, 'w', encoding="utf8") as jsonfile:
+                json.dump(data, jsonfile)
+
+
+async def get_headlines(sem, session, url, api_key=None):
 
     if api_key is None:
         api_key = config.api_key_newsapi
@@ -31,23 +60,28 @@ async def get_top_headlines(session, url, q=None, country='ar', category=None,
         'X-Api-Key': api_key
     }
 
-    if country is None:
+    """if country is None:
         country = get_country()
 
     if category is None:
-        category = get_category()
+        category = get_category()"""
+
+    res_json = {}
 
     async with aiohttp.ClientSession(headers=headers) as session:
 
-        async with session.get(url=url) as resp:
-            print(resp.status)
-            res = await resp.json()
-            # print(res)
+        async with sem, session.get(url=url) as resp:
+            with open('data/top_headlines_' + url.split("country=",1)[-1] +'.json', "wb") as jsonfile:
+                async for chunk in resp.content.iter_chunks():
+                    jsonfile.dumps(chunk, indent=1)
+            # print(resp.status)
+            # res = await resp.json()
+            # res_json.update({url.split("country=",1)[-1]: res})
 
-            return res
+            return res_json
 
 
-async def get_all_requests(session, urls, api_key=None):
+async def get_all_requests(sem, session, urls, api_key=None):
     if api_key is None:
         api_key = config.api_key_newsapi
 
@@ -56,9 +90,11 @@ async def get_all_requests(session, urls, api_key=None):
         'X-Api-Key': api_key
     }"""
 
+    sem = asyncio.Semaphore(10)
+
     for url in urls:
         tasks = []
-        task = asyncio.create_task(get_top_headlines(session, url))
+        task = asyncio.create_task(get_headlines(sem, session, url))
         tasks.append(task)
 
     results = await asyncio.gather(*tasks)
@@ -75,23 +111,27 @@ async def main(urls, api_key=None):
         'X-Api-Key': api_key
     }"""
 
+    sem = asyncio.Semaphore(10)
+
     async with aiohttp.ClientSession() as session:
-        data = await get_all_requests(session, urls)
+        data = await get_all_requests(sem, session, urls)
 
         return data
 
 
-async def update_top_headers():
-    country = 'ar'
-    urls = ['https://newsapi.org/v2/top-headlines?country={}'.format(country)]
+async def update_top_headlines():
+    country_list = [c for c in params.country]
+
+    urls = ['https://newsapi.org/v2/top-headlines?country=ar'] # .format(c[0].lower()) for c in country_list]
 
     results = await main(urls)
 
-    # asyncio.get_event_loop().run_until_complete(main(urls))
+    replace_null_img()
 
-    asyncio.sleep(1.0)
+    """for code, name in country_list:
+        articles_dict = [a for a in results[code][0]['articles']]
 
-    articles_dict = [a for a in results[0]['articles']]
+        print(articles_dict)
 
-    with open("data/top_headlines.json", "w") as jsonfile:
-        json.dump(articles_dict, jsonfile, indent=1)
+        with open('data/top_headlines' + name.lower() + '.json', 'w') as jsonfile:
+            json.dump(articles_dict, jsonfile, indent=1)"""

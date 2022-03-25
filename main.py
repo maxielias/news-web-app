@@ -1,20 +1,25 @@
 from flask import Flask, render_template
-# from flask_sqlalchemy import SQLAlchemy
+# from flask_wtf import FlaskForm
+from flask_sqlalchemy import SQLAlchemy
 import json
-# import os
-import search_news
-import asyncio
-import re
+# import search_news
 import math
+import params
 
 app = Flask(__name__)
-# db = SQLAlchemy(app)
+db = SQLAlchemy(app)
 
+"""class Country(db.Model):
+    id = db.Column(db.String(2), primary_key=True)
+    country = db.Column(db.String(50))
+
+class Form(FlaskForm):
+    country = SelectField('country', choices=[c for c in params.config])"""
 
 @app.route("/")
 @app.route("/home")
 async def home():
-    await search_news.update_top_headers()
+    """await search_news.update_top_headlines()
     asyncio.sleep(1.0)
 
     with open("data/top_headlines.json", "r") as jsonfile:
@@ -22,43 +27,41 @@ async def home():
 
     title = [a['title'] for a in top_headlines_json]
     url = [a['url'] for a in top_headlines_json]
-    n_articles = len([a['title'] for a in top_headlines_json])
+    n_articles = len([a['title'] for a in top_headlines_json])"""
 
-    return render_template("home.html",
-                           top_headlines_json=top_headlines_json,
-                           top_headlines_titles=title,
-                           top_headlines_url=url,
-                           n_articles=n_articles)
+    return render_template("home.html"),
+                           # top_headlines_json=top_headlines_json,
+                           # top_headlines_titles=title,
+                           # top_headlines_url=url,
+                           # n_articles=n_articles)
 
 
 @app.route("/top_headlines")
-def get_top_headlines():
-    with open("data/top_headlines.json", "r") as jsonfile:
+async def get_top_headlines():
+    """await search_news.update_top_headlines()
+    asyncio.sleep(1.0)"""
+    
+    with open("data/top_headlines_us.json", "r", encoding="utf8") as jsonfile:
         top_headlines_json = json.load(jsonfile)
 
+    top_headlines_json = [a for a in top_headlines_json['articles']]
     title = [a['title'].split(' - ')[0] for a in top_headlines_json]
-
     title_fixed = title
-    n_articles = len([a['title'] for a in top_headlines_json])
-
-    """list_title_agg = []
-    for t in range(0, len(title), 4):
-        start = t
-        end = t + 3
-        list_title_agg.append(title[start:end])"""
     
-    cols = 4
+    cols = 5
     rows = int(math.ceil(len(title)/cols))
+
+    countries = [c[1] for c in params.country]
 
     return render_template("top_headlines.html",
                            top_headlines_json=top_headlines_json,
                            top_headlines_titles=title_fixed,
-                           n_articles=n_articles,
+                           available_countries=countries,
                            rows=rows,
                            cols=cols)
 
 
-@app.route("/headlines")
+"""@app.route("/headlines")
 def top_headlines():
     with open("data/top_headlines.json", "r") as jsonfile:
         top_headlines_json = json.load(jsonfile)
@@ -70,7 +73,7 @@ def top_headlines():
     return render_template("headlines.html",
                            top_headlines_json=top_headlines_json,
                            top_headlines_titles=title,
-                           n_articles=n_articles)
+                           n_articles=n_articles)"""
 
 @app.route("/test")
 def test_html():
