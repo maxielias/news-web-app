@@ -13,7 +13,11 @@ a = [c for c in params.country]
 # urls = ['https://newsapi.org/v2/top-headlines?country={}'.format(c[0]) for c in a]
 urls = ['https://newsapi.org/v2/top-headlines?country=us']
 
-search_news.replace_null_img()
+country = 'AR'
+country_id = [c for c in params.country]
+print(country_id[country_id==country.lower()][0].lower())
+
+# search_news.replace_null_img()
 
 """async def main():
     try:

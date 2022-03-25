@@ -18,16 +18,24 @@
           <header>ALL NEWS WORLD</header>
         </div>
         <div class="subhead">You're reading top headlines from
-            <select id="available_countries" name="available_countries" data-live-search="true" class="form-select form-select-sm" title="available countries">
-            {% for country in available_countries %}
-            <option value={{ country }}>{{ country }}</option>
-            {% endfor %}
-          </select>
+          <form action="#" method="post" id="countriesAvailable" name="countriesAvailable">
+            <select id="countries" name="countries" onchange="selectedCountry()">
+              {% for country in available_countries %}
+                <option name="country" value={{ country }}>{{ country }}</option>
+              {% endfor %}
+            </select>
+            <input type="submit">
+            <script>
+              function selectedCountry() {
+                alert("News for " + document.getElementById("countries").value);
+                document.getElementById("countries").value.submit();
+              }
+            </script>
+          </form>
         </div>
         <script src="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
-        
       </div>
       <div class="content">
           {% for col in range(cols) %}
