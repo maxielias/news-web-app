@@ -1,7 +1,5 @@
 # Folders to ignore
-**/Maxi
-Maxi/
-
 **/pyvenv
 pyvenv/
 flask_venv/
+data_bup/
