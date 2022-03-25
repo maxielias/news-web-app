@@ -1,9 +1,11 @@
 <html>
   {% block title %}
     <head>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" type='text/css'/>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" type='text/css'/>
       <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic,900italic|Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
       <link rel="stylesheet" href="styles/newspaper.css">
-      <title>Newspaper Style Design Experiment</title>
+      <title>Something</title>
       <meta name="viewport" content="width=device-width">
     </head>  
   {% endblock %}
@@ -12,28 +14,38 @@
     <body>
       <div class="head">
         <div class="headerobjectswrapper">
-          <div class="weatherforcastbox"><span style="font-style: italic;">Weatherforcast for the next 24 hours: Plenty of Sunshine</span><br><span>Wind: 7km/h SSE; Ther: 21°C; Hum: 82%</span></div>
+          <div class="weatherforcastbox"><span style="font-style: italic;">Read news from over 50 countries</span><br><span>specially curated for you</span></div>
           <header>ALL NEWS WORLD</header>
         </div>
-        <div class="subhead">York, MA - Thursday August 30, 1978 - Seven Pages</div>
+        <div class="subhead">You're reading top headlines from
+            <select id="available_countries" name="available_countries" data-live-search="true" class="form-select form-select-sm" title="available countries">
+            {% for country in available_countries %}
+            <option value={{ country }}>{{ country }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <script src="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+        
       </div>
       <div class="content">
           {% for col in range(cols) %}
             <div class="collumn">
               {% for row in range(rows) %}
                 <div class="collumns">
-                    <div class="head"><span class="headline hl3">{{ top_headlines_titles[row*cols+col] }}</span>
-                      <p><span class="headline hl4">{{ top_headlines_json[row+col].source.name }}</span></p></div>
-                      <p>{{ top_headlines_json[row+col].description }}</p>
+                    <div class="head"><span class="headline hl3"><a href={{ top_headlines_json[row*cols+col].url }}>{{ top_headlines_titles[row*cols+col] }}</a></span>
+                      <p><span class="headline hl4">{{ top_headlines_json[row*cols+col].source.name }}</span></p></div>
+                      <figure class="figure">
+                        <img class="media" src={{ top_headlines_json[row*cols+col].urlToImage }} alt="">
+                        <figcaption class="figcaption"></figcaption>
+                    </figure>
+                      <p>{{ top_headlines_json[row*cols+col].description }}</p>
                 </div>
               {% endfor %}
             </div>
           {% endfor %}
       </div>
-
-    
-      <!-- Option 1: Bootstrap Bundle with Popper -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
     </body>
   {% endblock %}
@@ -55,6 +67,11 @@
     margin-bottom: 20px;
 
     }
+    a {
+    color: black;
+    text-decoration: none;
+    }
+    
     p{
     margin-top: 0;
     margin-bottom: 20px;
